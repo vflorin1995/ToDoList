@@ -1,3 +1,29 @@
-body {
-    background-color: bisque;
+.toDoList {
+  max-width: 300px;
+  margin: 96px auto;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  margin: 0 12px;
+}
+
+.index {
+  margin-left: auto;
+  margin-right: 12px;
+}
+
+.border {
+  border: 1px solid gray;
+}
+
+.input {
+  width: 282px;
+  height: 60px;
+  border: 1px solid gray;
+  padding: 0 0 0 16px;
 }
