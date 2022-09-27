@@ -7,15 +7,6 @@ const tasks = [
   { description: 'grass watering', completed: false, index: 3 },
 ];
 
-const title = document.createElement('h1');
-title.innerText = 'Today`s To Do';
-
-const input = document.createElement('input');
-input.placeholder = 'Add to your list';
-input.classList = 'input';
-
-toDoList.append(title, input);
-
 tasks.forEach((task) => {
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
