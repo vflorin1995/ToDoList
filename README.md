@@ -1,6 +1,6 @@
 ![](https://img.shields.io/badge/Microverse-blueviolet)
 
-# To Do List
+## To Do List
 
 > This is a To Do List Website
 
@@ -13,7 +13,31 @@
 - Webpack
 - ES6
 
-## Authors
+## Getting Started
+
+- To get a local copy up and running follow these simple example steps.
+
+### Prerequisites
+- Html & CSS basics
+- Git & Github
+- SSH key for github linked to git on local environment
+- Code compiler
+
+### Setup
+- Click on the green button on the top right corner with the text code
+- Click on SSH
+- Copy the text that appears below
+- Type "git clone" in your terminal and past the copied text next to "git clone" and press enter
+
+### Run tests
+
+- For tracking linters errors locally you need to follow [these steps](https://github.com/microverseinc/linters-config/tree/master/html-css-js)
+- For installing Webpack follow [this tutorial](https://webpack.js.org/guides/getting-started/#basic-setup)
+- For setting up Webpack HTML plugin follow [this tutorial](https://webpack.js.org/guides/output-management/#setting-up-htmlwebpackplugin)
+- For setting up Webpack CSS plugin follow [this tutorial](https://webpack.js.org/guides/asset-management/#loading-css)
+- For setting up a LiveServer follow [this tutorial](https://webpack.js.org/guides/development/#using-webpack-dev-server)
+
+# Authors
 
 👤 **Voicu FLorin**
 
@@ -23,11 +47,6 @@
 ## Show your support
 
 Give a ⭐️ if you like this project!
-
-## Acknowledgments
-
-- Design of the project is based on [Cindy Shin](https://www.behance.net/gallery/29845175/CC-Global-Summit-2015) design on Behance.
-- All other images are free or belong to their respective owners.
 
 ## 📝 License
 
