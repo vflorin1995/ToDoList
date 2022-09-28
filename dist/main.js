@@ -5,35 +5,99 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
+/* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
+
+
 
 
 const toDoList = document.querySelector('.toDoList');
-const tasks = [
-  { description: 'grass cutting', completed: false, index: 1 },
-  { description: 'grass cleaning', completed: false, index: 2 },
-  { description: 'grass watering', completed: false, index: 3 },
-];
+const inputList = document.querySelector('.input');
 
-tasks.forEach((task) => {
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.value = task.completed;
-  checkbox.id = 'tick';
-  checkbox.classList = 'checkbox';
+let tasklist = [];
 
-  const description = document.createElement('label');
-  description.for = '#tick';
-  description.innerText = task.description;
+const data = (0,_LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__.getStorage)();
+if (data) {
+  tasklist = data;
+}
 
-  const index = document.createElement('h3');
-  index.innerText = task.index;
-  index.className = 'index';
+const display = () => {
+  toDoList.innerText = '';
+  let indexValue = 1;
+  tasklist.forEach((task) => {
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = task.completed;
+    checkbox.id = 'tick';
+    checkbox.classList = 'checkbox';
 
-  const container = document.createElement('div');
-  container.classList = 'flex border';
-  container.append(checkbox, description, index);
-  toDoList.append(container);
+    const description = document.createElement('h3');
+    description.className = 'description';
+    description.innerText = task.description;
+
+    const editField = document.createElement('input');
+    editField.className = 'editField displayNone';
+    editField.value = task.description;
+
+    const remove = document.createElement('div');
+    remove.innerHTML = '<i class="fa-solid fa-trash"></i>';
+    remove.className = 'remove';
+
+    const index = document.createElement('h3');
+    index.innerText = indexValue;
+    tasklist.task = indexValue;
+    index.className = 'index displayNone';
+    indexValue += 1;
+
+    const container = document.createElement('div');
+    container.classList = 'flex border';
+    container.append(checkbox, description, editField, remove, index);
+    toDoList.append(container);
+  });
+
+  const closeBtn = Array.from(document.querySelectorAll('.remove'));
+  closeBtn.forEach((element) => {
+    element.addEventListener('click', () => {
+      const z = closeBtn.indexOf(element);
+      (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeBook)(tasklist, z);
+      display();
+    });
+  });
+
+  const editBtn = Array.from(document.querySelectorAll('.description'));
+  editBtn.forEach((element) => {
+    let editableText;
+    element.addEventListener('click', () => {
+      element.classList.add('displayNone');
+      editableText = element.nextSibling;
+      editableText.classList.remove('displayNone');
+
+      editableText.addEventListener('focusout', () => {
+        if (editableText.value) {
+          element.innerText = editableText.value;
+          editableText.classList.add('displayNone');
+          element.classList.remove('displayNone');
+        } else {
+          const z = editBtn.indexOf(element);
+          (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeBook)(tasklist, z);
+          display();
+        }
+      });
+    });
+  });
+  (0,_LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(tasklist);
+};
+
+inputList.addEventListener('keydown', (e) => {
+  if (e.keyCode === 13) {
+    const q = inputList.value;
+    (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.addBook)(tasklist, q);
+    inputList.value = '';
+    display();
+  }
 });
+
+display();
 
 /***/ }),
 /* 1 */
@@ -384,7 +448,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\n  max-width: 300px;\n  margin: 96px auto;\n}\n\n.flex {\n  display: flex;\n  align-items: center;\n}\n\n.checkbox {\n  margin: 0 12px;\n}\n\n.index {\n  margin-left: auto;\n  margin-right: 12px;\n}\n\n.border {\n  border: 1px solid gray;\n}\n\n.input {\n  width: 282px;\n  height: 60px;\n  border: 1px solid gray;\n  padding: 0 0 0 16px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n  max-width: 300px;\n  margin: 96px auto;\n  font-family: 'Times New Roman', Times, serif;\n  font-size: 18px;\n}\n\n.flex {\n  display: flex;\n  align-items: center;\n}\n\n.checkbox {\n  margin: 0 12px;\n}\n\n.index {\n  margin-left: auto;\n  margin-right: 12px;\n}\n\n.border {\n  border: 1px solid gray;\n}\n\n.input {\n  width: 282px;\n  height: 60px;\n  border: 1px solid gray;\n  padding: 0 0 0 16px;\n}\n\n.displayNone {\n  display: none;\n}\n\n.description {\n  margin: 18px auto 18px 0;\n}\n\n.editField {\n  max-width: 196px;\n  margin: 18px auto 18px 0;\n  border: none;\n  font-size: inherit;\n}\n\n.remove {\n  margin-right: 18px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -505,6 +569,52 @@ module.exports = function (cssWithMappingToString) {
 
   return list;
 };
+
+/***/ }),
+/* 11 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getStorage": () => (/* binding */ getStorage),
+/* harmony export */   "updateStorage": () => (/* binding */ updateStorage)
+/* harmony export */ });
+const getStorage = () => {
+  const localdata = localStorage.getItem('localdata');
+  const dataStored = JSON.parse(localdata);
+  return dataStored;
+};
+
+const updateStorage = (obj) => {
+  const localdata = JSON.stringify(obj);
+  localStorage.setItem('localdata', localdata);
+};
+
+
+
+/***/ }),
+/* 12 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "addBook": () => (/* binding */ addBook),
+/* harmony export */   "removeBook": () => (/* binding */ removeBook)
+/* harmony export */ });
+const addBook = (arr, description) => {
+  arr.push({
+    description,
+    completed: false,
+    index: (arr.length + 1),
+  });
+};
+
+const removeBook = (arr, index) => {
+  const q = index;
+  arr.splice(q, 1);
+};
+
+
 
 /***/ })
 ],
