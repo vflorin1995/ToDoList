@@ -59,7 +59,7 @@ const display = () => {
   closeBtn.forEach((element) => {
     element.addEventListener('click', () => {
       const z = closeBtn.indexOf(element);
-      (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeBook)(tasklist, z);
+      (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeTask)(tasklist, z);
       display();
     });
   });
@@ -70,16 +70,10 @@ const display = () => {
     element.addEventListener('change', () => {
       if (element.value === 'true') {
         element.value = false;
-        let q = tasklist[z];
-        q.completed = false;
-        console.log(q);
-        console.log(tasklist[z]);
+        tasklist[z].completed = false;
       } else {
         element.value = true;
-        let q = tasklist[z];
-        q.completed = true;
-        console.log(q);
-        console.log(tasklist[z]);
+        tasklist[z].completed = true;
       }
       (0,_LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(tasklist);
     });
@@ -90,10 +84,11 @@ const display = () => {
     const z = editBtn.indexOf(element);
     element.addEventListener('focusout', () => {
       if (element.value) {
-        let obj = tasklist[z];
+        const obj = tasklist[z];
         obj.description = element.value;
+        (0,_LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(tasklist);
       } else {
-        (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeBook)(tasklist, z);
+        (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeTask)(tasklist, z);
         display();
       }
     });
@@ -108,8 +103,7 @@ removeBtn.addEventListener('click', () => {
 
 inputList.addEventListener('keydown', (e) => {
   if (e.keyCode === 13) {
-    const q = inputList.value;
-    (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.addBook)(tasklist, q);
+    (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.addTask)(tasklist, inputList.value);
     inputList.value = '';
     display();
   }
@@ -616,10 +610,10 @@ const updateStorage = (obj) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addBook": () => (/* binding */ addBook),
-/* harmony export */   "removeBook": () => (/* binding */ removeBook)
+/* harmony export */   "addTask": () => (/* binding */ addTask),
+/* harmony export */   "removeTask": () => (/* binding */ removeTask)
 /* harmony export */ });
-const addBook = (arr, description) => {
+const addTask = (arr, description) => {
   arr.push({
     description,
     completed: false,
@@ -627,7 +621,7 @@ const addBook = (arr, description) => {
   });
 };
 
-const removeBook = (arr, index) => {
+const removeTask = (arr, index) => {
   const q = index;
   arr.splice(q, 1);
 };

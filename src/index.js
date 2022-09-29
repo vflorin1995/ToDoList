@@ -62,11 +62,9 @@ const display = () => {
       if (element.value === 'true') {
         element.value = false;
         tasklist[z].completed = false;
-        console.log(tasklist[z]);
       } else {
         element.value = true;
         tasklist[z].completed = true;
-        console.log(tasklist[z]);
       }
       updateStorage(tasklist);
     });
