@@ -1,6 +1,6 @@
 import './style.css';
 import { getStorage, updateStorage } from './LocalStorage.js';
-import { addBook, removeBook } from './functions.js';
+import { addTask, removeTask } from './functions.js';
 
 const toDoList = document.querySelector('.toDoList');
 const inputList = document.querySelector('.input');
@@ -50,7 +50,7 @@ const display = () => {
   closeBtn.forEach((element) => {
     element.addEventListener('click', () => {
       const z = closeBtn.indexOf(element);
-      removeBook(tasklist, z);
+      removeTask(tasklist, z);
       display();
     });
   });
@@ -61,15 +61,11 @@ const display = () => {
     element.addEventListener('change', () => {
       if (element.value === 'true') {
         element.value = false;
-        let q = tasklist[z];
-        q.completed = false;
-        console.log(q);
+        tasklist[z].completed = false;
         console.log(tasklist[z]);
       } else {
         element.value = true;
-        let q = tasklist[z];
-        q.completed = true;
-        console.log(q);
+        tasklist[z].completed = true;
         console.log(tasklist[z]);
       }
       updateStorage(tasklist);
@@ -81,10 +77,11 @@ const display = () => {
     const z = editBtn.indexOf(element);
     element.addEventListener('focusout', () => {
       if (element.value) {
-        let obj = tasklist[z];
+        const obj = tasklist[z];
         obj.description = element.value;
+        updateStorage(tasklist);
       } else {
-        removeBook(tasklist, z);
+        removeTask(tasklist, z);
         display();
       }
     });
@@ -99,8 +96,7 @@ removeBtn.addEventListener('click', () => {
 
 inputList.addEventListener('keydown', (e) => {
   if (e.keyCode === 13) {
-    const q = inputList.value;
-    addBook(tasklist, q);
+    addTask(tasklist, inputList.value);
     inputList.value = '';
     display();
   }

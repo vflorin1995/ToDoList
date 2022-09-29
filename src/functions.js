@@ -1,4 +1,4 @@
-const addBook = (arr, description) => {
+const addTask = (arr, description) => {
   arr.push({
     description,
     completed: false,
@@ -6,9 +6,9 @@ const addBook = (arr, description) => {
   });
 };
 
-const removeBook = (arr, index) => {
+const removeTask = (arr, index) => {
   const q = index;
   arr.splice(q, 1);
 };
 
-export { addBook, removeBook };
+export { addTask, removeTask };
