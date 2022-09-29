@@ -22,12 +22,8 @@ const display = () => {
     checkbox.id = 'tick';
     checkbox.classList = 'checkbox';
 
-    const description = document.createElement('h3');
-    description.className = 'description';
-    description.innerText = task.description;
-
     const editField = document.createElement('input');
-    editField.className = 'editField displayNone';
+    editField.className = 'editField';
     editField.value = task.description;
 
     const remove = document.createElement('div');
@@ -42,7 +38,7 @@ const display = () => {
 
     const container = document.createElement('div');
     container.classList = 'flex border';
-    container.append(checkbox, description, editField, remove, index);
+    container.append(checkbox, editField, remove, index);
     toDoList.append(container);
   });
 
@@ -55,25 +51,17 @@ const display = () => {
     });
   });
 
-  const editBtn = Array.from(document.querySelectorAll('.description'));
+  const editBtn = Array.from(document.querySelectorAll('.editField'));
   editBtn.forEach((element) => {
-    let editableText;
-    element.addEventListener('click', () => {
-      element.classList.add('displayNone');
-      editableText = element.nextSibling;
-      editableText.classList.remove('displayNone');
-
-      editableText.addEventListener('focusout', () => {
-        if (editableText.value) {
-          element.innerText = editableText.value;
-          editableText.classList.add('displayNone');
-          element.classList.remove('displayNone');
-        } else {
-          const z = editBtn.indexOf(element);
-          removeBook(tasklist, z);
-          display();
-        }
-      });
+    const z = editBtn.indexOf(element);
+    element.addEventListener('focusout', () => {
+      if (element.value) {
+        let obj = tasklist[z];
+        obj.description = element.value;
+      } else {
+        removeBook(tasklist, z);
+        display();
+      }
     });
   });
   updateStorage(tasklist);
