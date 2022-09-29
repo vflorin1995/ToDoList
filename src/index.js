@@ -4,6 +4,7 @@ import { addBook, removeBook } from './functions.js';
 
 const toDoList = document.querySelector('.toDoList');
 const inputList = document.querySelector('.input');
+const removeBtn = document.querySelector('button');
 
 let tasklist = [];
 
@@ -19,6 +20,9 @@ const display = () => {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.value = task.completed;
+    if (checkbox.value === 'true') {
+      checkbox.checked = true;
+    }
     checkbox.id = 'tick';
     checkbox.classList = 'checkbox';
 
@@ -31,9 +35,9 @@ const display = () => {
     remove.className = 'remove';
 
     const index = document.createElement('h3');
+    task.index = indexValue;
     index.innerText = indexValue;
-    tasklist.task = indexValue;
-    index.className = 'index displayNone';
+    index.className = 'displayNone';
     indexValue += 1;
 
     const container = document.createElement('div');
@@ -48,6 +52,27 @@ const display = () => {
       const z = closeBtn.indexOf(element);
       removeBook(tasklist, z);
       display();
+    });
+  });
+
+  const checkArr = Array.from(document.querySelectorAll('.checkbox'));
+  checkArr.forEach((element) => {
+    const z = checkArr.indexOf(element);
+    element.addEventListener('change', () => {
+      if (element.value === 'true') {
+        element.value = false;
+        let q = tasklist[z];
+        q.completed = false;
+        console.log(q);
+        console.log(tasklist[z]);
+      } else {
+        element.value = true;
+        let q = tasklist[z];
+        q.completed = true;
+        console.log(q);
+        console.log(tasklist[z]);
+      }
+      updateStorage(tasklist);
     });
   });
 
@@ -66,6 +91,11 @@ const display = () => {
   });
   updateStorage(tasklist);
 };
+
+removeBtn.addEventListener('click', () => {
+  tasklist = tasklist.filter((item) => !item.completed);
+  display();
+});
 
 inputList.addEventListener('keydown', (e) => {
   if (e.keyCode === 13) {
