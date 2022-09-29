@@ -13,6 +13,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const toDoList = document.querySelector('.toDoList');
 const inputList = document.querySelector('.input');
+const removeBtn = document.querySelector('button');
 
 let tasklist = [];
 
@@ -28,15 +29,14 @@ const display = () => {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.value = task.completed;
+    if (checkbox.value === 'true') {
+      checkbox.checked = true;
+    }
     checkbox.id = 'tick';
     checkbox.classList = 'checkbox';
 
-    const description = document.createElement('h3');
-    description.className = 'description';
-    description.innerText = task.description;
-
     const editField = document.createElement('input');
-    editField.className = 'editField displayNone';
+    editField.className = 'editField';
     editField.value = task.description;
 
     const remove = document.createElement('div');
@@ -44,14 +44,14 @@ const display = () => {
     remove.className = 'remove';
 
     const index = document.createElement('h3');
+    task.index = indexValue;
     index.innerText = indexValue;
-    tasklist.task = indexValue;
-    index.className = 'index displayNone';
+    index.className = 'displayNone';
     indexValue += 1;
 
     const container = document.createElement('div');
     container.classList = 'flex border';
-    container.append(checkbox, description, editField, remove, index);
+    container.append(checkbox, editField, remove, index);
     toDoList.append(container);
   });
 
@@ -59,39 +59,51 @@ const display = () => {
   closeBtn.forEach((element) => {
     element.addEventListener('click', () => {
       const z = closeBtn.indexOf(element);
-      (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeBook)(tasklist, z);
+      (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeTask)(tasklist, z);
       display();
     });
   });
 
-  const editBtn = Array.from(document.querySelectorAll('.description'));
-  editBtn.forEach((element) => {
-    let editableText;
-    element.addEventListener('click', () => {
-      element.classList.add('displayNone');
-      editableText = element.nextSibling;
-      editableText.classList.remove('displayNone');
+  const checkArr = Array.from(document.querySelectorAll('.checkbox'));
+  checkArr.forEach((element) => {
+    const z = checkArr.indexOf(element);
+    element.addEventListener('change', () => {
+      if (element.value === 'true') {
+        element.value = false;
+        tasklist[z].completed = false;
+      } else {
+        element.value = true;
+        tasklist[z].completed = true;
+      }
+      (0,_LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(tasklist);
+    });
+  });
 
-      editableText.addEventListener('focusout', () => {
-        if (editableText.value) {
-          element.innerText = editableText.value;
-          editableText.classList.add('displayNone');
-          element.classList.remove('displayNone');
-        } else {
-          const z = editBtn.indexOf(element);
-          (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeBook)(tasklist, z);
-          display();
-        }
-      });
+  const editBtn = Array.from(document.querySelectorAll('.editField'));
+  editBtn.forEach((element) => {
+    const z = editBtn.indexOf(element);
+    element.addEventListener('focusout', () => {
+      if (element.value) {
+        const obj = tasklist[z];
+        obj.description = element.value;
+        (0,_LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(tasklist);
+      } else {
+        (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeTask)(tasklist, z);
+        display();
+      }
     });
   });
   (0,_LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(tasklist);
 };
 
+removeBtn.addEventListener('click', () => {
+  tasklist = tasklist.filter((item) => !item.completed);
+  display();
+});
+
 inputList.addEventListener('keydown', (e) => {
   if (e.keyCode === 13) {
-    const q = inputList.value;
-    (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.addBook)(tasklist, q);
+    (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.addTask)(tasklist, inputList.value);
     inputList.value = '';
     display();
   }
@@ -448,7 +460,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\n  max-width: 300px;\n  margin: 96px auto;\n  font-family: 'Times New Roman', Times, serif;\n  font-size: 18px;\n}\n\n.flex {\n  display: flex;\n  align-items: center;\n}\n\n.checkbox {\n  margin: 0 12px;\n}\n\n.index {\n  margin-left: auto;\n  margin-right: 12px;\n}\n\n.border {\n  border: 1px solid gray;\n}\n\n.input {\n  width: 282px;\n  height: 60px;\n  border: 1px solid gray;\n  padding: 0 0 0 16px;\n}\n\n.displayNone {\n  display: none;\n}\n\n.description {\n  margin: 18px auto 18px 0;\n}\n\n.editField {\n  max-width: 196px;\n  margin: 18px auto 18px 0;\n  border: none;\n  font-size: inherit;\n}\n\n.remove {\n  margin-right: 18px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n  max-width: 300px;\n  margin: 96px auto;\n  font-family: 'Times New Roman', Times, serif;\n  font-size: 18px;\n  font-weight: 600;\n}\n\n.flex {\n  display: flex;\n  align-items: center;\n}\n\n.checkbox {\n  margin: 0 12px;\n}\n\n.index {\n  margin-left: auto;\n  margin-right: 12px;\n}\n\n.border {\n  border: 1px solid gray;\n}\n\n.input {\n  width: 282px;\n  height: 60px;\n  border: 1px solid gray;\n  padding: 0 0 0 16px;\n  font-family: 'Times New Roman', Times, serif;\n  font-size: 18px;\n  font-weight: 600;\n}\n\n.displayNone {\n  display: none;\n}\n\n.editField {\n  max-width: 196px;\n  margin: 18px auto 18px 0;\n  border: none;\n  font-family: 'Times New Roman', Times, serif;\n  font-size: 18px;\n  font-weight: 600;\n}\n\n.remove {\n  margin-right: 18px;\n}\n\nbutton {\n  background-color: green;\n  color: white;\n  margin: 0;\n  border: 1px solid gray;\n  padding: 10px 92px;\n  font-family: 'Times New Roman', Times, serif;\n  font-size: 18px;\n  font-weight: 600;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -598,10 +610,10 @@ const updateStorage = (obj) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addBook": () => (/* binding */ addBook),
-/* harmony export */   "removeBook": () => (/* binding */ removeBook)
+/* harmony export */   "addTask": () => (/* binding */ addTask),
+/* harmony export */   "removeTask": () => (/* binding */ removeTask)
 /* harmony export */ });
-const addBook = (arr, description) => {
+const addTask = (arr, description) => {
   arr.push({
     description,
     completed: false,
@@ -609,7 +621,7 @@ const addBook = (arr, description) => {
   });
 };
 
-const removeBook = (arr, index) => {
+const removeTask = (arr, index) => {
   const q = index;
   arr.splice(q, 1);
 };

@@ -3,6 +3,7 @@ body {
   margin: 96px auto;
   font-family: 'Times New Roman', Times, serif;
   font-size: 18px;
+  font-weight: 600;
 }
 
 .flex {
@@ -28,23 +29,35 @@ body {
   height: 60px;
   border: 1px solid gray;
   padding: 0 0 0 16px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .displayNone {
   display: none;
 }
 
-.description {
-  margin: 18px auto 18px 0;
-}
-
 .editField {
   max-width: 196px;
   margin: 18px auto 18px 0;
   border: none;
-  font-size: inherit;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .remove {
   margin-right: 18px;
+}
+
+button {
+  background-color: green;
+  color: white;
+  margin: 0;
+  border: 1px solid gray;
+  padding: 10px 92px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 18px;
+  font-weight: 600;
 }

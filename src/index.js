@@ -1,9 +1,10 @@
 import './style.css';
 import { getStorage, updateStorage } from './LocalStorage.js';
-import { addBook, removeBook } from './functions.js';
+import { addTask, removeTask } from './functions.js';
 
 const toDoList = document.querySelector('.toDoList');
 const inputList = document.querySelector('.input');
+const removeBtn = document.querySelector('button');
 
 let tasklist = [];
 
@@ -19,15 +20,14 @@ const display = () => {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.value = task.completed;
+    if (checkbox.value === 'true') {
+      checkbox.checked = true;
+    }
     checkbox.id = 'tick';
     checkbox.classList = 'checkbox';
 
-    const description = document.createElement('h3');
-    description.className = 'description';
-    description.innerText = task.description;
-
     const editField = document.createElement('input');
-    editField.className = 'editField displayNone';
+    editField.className = 'editField';
     editField.value = task.description;
 
     const remove = document.createElement('div');
@@ -35,14 +35,14 @@ const display = () => {
     remove.className = 'remove';
 
     const index = document.createElement('h3');
+    task.index = indexValue;
     index.innerText = indexValue;
-    tasklist.task = indexValue;
-    index.className = 'index displayNone';
+    index.className = 'displayNone';
     indexValue += 1;
 
     const container = document.createElement('div');
     container.classList = 'flex border';
-    container.append(checkbox, description, editField, remove, index);
+    container.append(checkbox, editField, remove, index);
     toDoList.append(container);
   });
 
@@ -50,39 +50,51 @@ const display = () => {
   closeBtn.forEach((element) => {
     element.addEventListener('click', () => {
       const z = closeBtn.indexOf(element);
-      removeBook(tasklist, z);
+      removeTask(tasklist, z);
       display();
     });
   });
 
-  const editBtn = Array.from(document.querySelectorAll('.description'));
-  editBtn.forEach((element) => {
-    let editableText;
-    element.addEventListener('click', () => {
-      element.classList.add('displayNone');
-      editableText = element.nextSibling;
-      editableText.classList.remove('displayNone');
+  const checkArr = Array.from(document.querySelectorAll('.checkbox'));
+  checkArr.forEach((element) => {
+    const z = checkArr.indexOf(element);
+    element.addEventListener('change', () => {
+      if (element.value === 'true') {
+        element.value = false;
+        tasklist[z].completed = false;
+      } else {
+        element.value = true;
+        tasklist[z].completed = true;
+      }
+      updateStorage(tasklist);
+    });
+  });
 
-      editableText.addEventListener('focusout', () => {
-        if (editableText.value) {
-          element.innerText = editableText.value;
-          editableText.classList.add('displayNone');
-          element.classList.remove('displayNone');
-        } else {
-          const z = editBtn.indexOf(element);
-          removeBook(tasklist, z);
-          display();
-        }
-      });
+  const editBtn = Array.from(document.querySelectorAll('.editField'));
+  editBtn.forEach((element) => {
+    const z = editBtn.indexOf(element);
+    element.addEventListener('focusout', () => {
+      if (element.value) {
+        const obj = tasklist[z];
+        obj.description = element.value;
+        updateStorage(tasklist);
+      } else {
+        removeTask(tasklist, z);
+        display();
+      }
     });
   });
   updateStorage(tasklist);
 };
 
+removeBtn.addEventListener('click', () => {
+  tasklist = tasklist.filter((item) => !item.completed);
+  display();
+});
+
 inputList.addEventListener('keydown', (e) => {
   if (e.keyCode === 13) {
-    const q = inputList.value;
-    addBook(tasklist, q);
+    addTask(tasklist, inputList.value);
     inputList.value = '';
     display();
   }
