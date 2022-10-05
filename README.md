@@ -12,6 +12,7 @@
 - Linters
 - Webpack
 - ES6
+- JEST
 
 ## Getting Started
 
