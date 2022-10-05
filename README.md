@@ -2,7 +2,7 @@
 
 ## To Do List
 
-> This is a To Do List Website
+> This is a To Do List Website. Feel free to use it to keep track of your daily activities.
 
 ## Built With
 
