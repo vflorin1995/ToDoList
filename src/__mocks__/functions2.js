@@ -1,6 +1,6 @@
 function checkF(e, index, arr) {
-  e = "true";
-  if (e === "true") {
+  e = 'true';
+  if (e === 'true') {
     e = false;
     arr[index].completed = false;
   } else {
