@@ -1,6 +1,7 @@
 import './style.css';
 import { getStorage, updateStorage } from './LocalStorage.js';
 import { addTask, removeTask } from './functions.js';
+import { checkF, updateItem, clearF } from './functions2.js';
 
 const toDoList = document.querySelector('.toDoList');
 const inputList = document.querySelector('.input');
@@ -59,13 +60,7 @@ const display = () => {
   checkArr.forEach((element) => {
     const z = checkArr.indexOf(element);
     element.addEventListener('change', () => {
-      if (element.value === 'true') {
-        element.value = false;
-        tasklist[z].completed = false;
-      } else {
-        element.value = true;
-        tasklist[z].completed = true;
-      }
+      checkF(element, z, tasklist);
       updateStorage(tasklist);
     });
   });
@@ -75,8 +70,7 @@ const display = () => {
     const z = editBtn.indexOf(element);
     element.addEventListener('focusout', () => {
       if (element.value) {
-        const obj = tasklist[z];
-        obj.description = element.value;
+        updateItem(tasklist, z, element);
         updateStorage(tasklist);
       } else {
         removeTask(tasklist, z);
@@ -88,7 +82,7 @@ const display = () => {
 };
 
 removeBtn.addEventListener('click', () => {
-  tasklist = tasklist.filter((item) => !item.completed);
+  tasklist = clearF(tasklist);
   display();
 });
 

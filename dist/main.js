@@ -7,6 +7,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
+/* harmony import */ var _functions2_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(13);
+
 
 
 
@@ -68,13 +70,7 @@ const display = () => {
   checkArr.forEach((element) => {
     const z = checkArr.indexOf(element);
     element.addEventListener('change', () => {
-      if (element.value === 'true') {
-        element.value = false;
-        tasklist[z].completed = false;
-      } else {
-        element.value = true;
-        tasklist[z].completed = true;
-      }
+      (0,_functions2_js__WEBPACK_IMPORTED_MODULE_3__.checkF)(element, z, tasklist);
       (0,_LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(tasklist);
     });
   });
@@ -84,8 +80,7 @@ const display = () => {
     const z = editBtn.indexOf(element);
     element.addEventListener('focusout', () => {
       if (element.value) {
-        const obj = tasklist[z];
-        obj.description = element.value;
+        (0,_functions2_js__WEBPACK_IMPORTED_MODULE_3__.updateItem)(tasklist, z, element);
         (0,_LocalStorage_js__WEBPACK_IMPORTED_MODULE_1__.updateStorage)(tasklist);
       } else {
         (0,_functions_js__WEBPACK_IMPORTED_MODULE_2__.removeTask)(tasklist, z);
@@ -97,7 +92,7 @@ const display = () => {
 };
 
 removeBtn.addEventListener('click', () => {
-  tasklist = tasklist.filter((item) => !item.completed);
+  tasklist = (0,_functions2_js__WEBPACK_IMPORTED_MODULE_3__.clearF)(tasklist);
   display();
 });
 
@@ -622,9 +617,39 @@ const addTask = (arr, description) => {
 };
 
 const removeTask = (arr, index) => {
-  const q = index;
-  arr.splice(q, 1);
+  arr.splice(index, 1);
 };
+
+
+
+/***/ }),
+/* 13 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "checkF": () => (/* binding */ checkF),
+/* harmony export */   "clearF": () => (/* binding */ clearF),
+/* harmony export */   "updateItem": () => (/* binding */ updateItem)
+/* harmony export */ });
+function checkF(e, index, arr) {
+  if (e.value === 'true') {
+    e.value = false;
+    arr[index].completed = false;
+  } else {
+    e.value = true;
+    arr[index].completed = true;
+  }
+}
+
+function updateItem(arr, index, e) {
+  arr[index].description = e.value;
+}
+
+function clearF(arr) {
+  const x = arr.filter((item) => !item.completed);
+  return x;
+}
 
 
 
