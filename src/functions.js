@@ -7,8 +7,7 @@ const addTask = (arr, description) => {
 };
 
 const removeTask = (arr, index) => {
-  const q = index;
-  arr.splice(q, 1);
+  arr.splice(index, 1);
 };
 
 export { addTask, removeTask };
